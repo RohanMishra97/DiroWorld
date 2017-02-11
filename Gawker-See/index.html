@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style type="text/css">
+            .body{
+                background-color: #fafafa;
+            }
+            .table {
+                border-radius: 5px;
+                margin: 0px auto;
+                float: none;
+            }
+            .jumbotron{
+                background-color: #00bfa5;
+            }
+        </style>
+    </head>
+    <body>
+
+        <img src="logo.png" class="img-responsive center-block img-circle" width="300" height="300">
+        <div class="page-header">
+            <h1 class="text-center text-primary">Hackers around you.</h1>
+            <h3 class="text-center text-primary"><a href="#" id="ghsubmitbtn">Click to find out!</a></h3>
+        </div>
+        <div class="container center-block" id="loader"></div>
+        <div class="container" id="ghapidata">
+            <!--Filled by jSON-->
+        </div>
+<script type="text/javascript">
+//TODO- Use Halls API
+//var allJsonList = getAllObjectData("hackers", 0,400,"asc",”987146546558|987146546812”, "", 1);
+//vat allJson = JSON.parse(allJsonList);
+var jsonList = [{"username":"RohanMishra97","teamname":"Amazons"},{"username":"ishan-maheshwari","teamname":"Amazons"},{"username":"rachitgarg1907","teamname":"Elites"},{"username":"rajatgupta52","teamname":"Amazons"}];
+$(function(){
+  $('#ghsubmitbtn').on('click', function(e){
+    e.preventDefault();
+    $('#loader').html('<div id="loader" class="center-block"><img src="loader.gif" alt="loading..."></div>');
+    //TODO
+    $('#ghsubmitbtn').hide();
+    $.each(jsonList, function(key,value){
+            console.log("here");
+            var username = value.username;
+            var teamname = value.teamname;
+            var requri   = 'https://api.github.com/users/'+username;
+            var repouri  = 'https://api.github.com/users/'+username+'/repos';
+    
+            requestJSON(requri, function(json) {
+            if(json.message == "Not Found" || username == '') {
+                 $('#ghapidata').html("<h2>No User Info Found</h2>");
+             }
+      
+            else {
+                 // else we have a user and we display their info
+                var fullname   = json.name;
+                var username   = json.login;
+                var aviurl     = json.avatar_url;
+                var profileurl = json.html_url;
+                var location   = json.location;
+                var followersnum = json.followers;
+                var followingnum = json.following;
+                var reposnum     = json.public_repos;
+        
+                if(fullname == undefined) { fullname = username; }
+        
+                    var outhtml = '<div class="jumbotron"><h2>'+fullname+'('+teamname+') <span class="smallname">(@<a href="'+profileurl+'" target="_blank">'+username+'</a>)</span></h2>';
+                    outhtml = outhtml + '<div class="ghcontent"><div class="avi"><a href="'+profileurl+'" target="_blank"><img src="'+aviurl+'" class="img-circle pull-right" width="140" height="140" alt="'+username+'"></a></div>';
+                    outhtml = outhtml + '<p>Followers: '+followersnum+' <br>Following: '+followingnum+'<br>Repos: '+reposnum+'</p></div>';
+                    $('#ghapidata').append(outhtml);
+            } // end else statement
+    }); // end requestJSON Ajax call
+    }); //End iteration
+$('#loader ').hide();
+  }); // end click event handler
+  
+  function requestJSON(url, callback) {
+    $.ajax({
+      url: url,
+      complete: function(xhr) {
+        callback.call(null, xhr.responseJSON);
+      }
+    });
+  }
+});
+        </script>
+    </body>
+</html>
+
+
+
+<!--'<h2>'+fullname+' <span class="smallname">(@<a href="'+profileurl+'" target="_blank">'+username+'</a>)</span></h2>';
+        outhtml = outhtml + '<div class="ghcontent"><div class="avi"><a href="'+profileurl+'" target="_blank"><img src="'+aviurl+'" width="80" height="80" alt="'+username+'"></a></div>';
+        outhtml = outhtml + '<p>Followers: '+followersnum+' - Following: '+followingnum+'<br>Repos: '+reposnum+'</p></div>';
+        outhtml = outhtml + '<div class="repolist clearfix">';-->

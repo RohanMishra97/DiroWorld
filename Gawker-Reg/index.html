@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <img src="github-octocat.png" class="img-responsive center-block img-circle" width="300" height="300">
+        <div class="container" id="input_form">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">Your Github username</span>
+                <input type="text" class="form-control" placeholder="eg. tHacker" id="username">
+            </div><br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">Your Team Name</span>
+                <input type="text" class="form-control" placeholder="eg. tName" id="teamname">
+            </div><button type="submit" class="btn btn-lg pull-right" onClick="writeName();">Submit</button><br>
+        </div>
+        <div class="well well-lg text-center">
+            <h3>Happy Hacking!</h3>
+        </div>
+        <p id="test"></p>
+        <script type="text/javascript">
+
+            function writeName()
+            {
+                var name = document.getElementById('username');
+                var teamname = document.getElementById('teamname');
+                var tester = document.getElementById('test');
+                //tester.innerHTML = "<h6>"+name.value+" - " + teamname.value;
+                document.getElementById('input_form').innerHTML = '<h2 class="text-success text-center">You have been registered!</h2>';
+                var str = '{ "name":"'+name.value+'","teamname":"'+teamname.value+'"}';
+                //tester.innerHTML = str;
+                var filter = "hackers"
+                var receiverJSON = getUserDetail();
+                var receiverStr = JSON.parse(receiverJSON);
+                var receiver = receiverStr[0].receiver;
+                var row_id = setObjectData(str,filter,receiver);
+                if(row_id === null)
+                {
+                    showToast("You've already registered.");
+                }
+                
+            }
+        </script>
+        
+    </body>
+</html>
